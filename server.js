@@ -15,6 +15,8 @@ app.use(express.urlencoded({ extended: true }));
 // parse incoming JSON data
 app.use(express.json());
 
+app.use(express.static("public"));
+
 function findById(id, animalsArray) {
   const result = animalsArray.filter((animal) => animal.id === id)[0];
   return result;
@@ -91,7 +93,7 @@ function validateAnimal(animal) {
   return true;
 }
 
-//express
+//express - ROUTES
 app.get("/api/animals", (req, res) => {
   let results = animals;
   if (req.query) {
@@ -108,6 +110,24 @@ app.get("/api/animals/:id", (req, res) => {
     res.sendStatus(404);
   }
 });
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "./public/index.html"));
+});
+
+app.get("/animals", (req, res) => {
+  res.sendFile(path.join(__dirname, "./public/animals.html"));
+});
+
+app.get("/zookeepers", (req, res) => {
+  res.sendFile(path.join(__dirname, "./public/zookeepers.html"));
+});
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "./public/index.html"));
+});
+
+// express - POSTS
 
 app.post("/api/animals", (req, res) => {
   // set id based on what the next index of the array will be
